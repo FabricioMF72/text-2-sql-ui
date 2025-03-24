@@ -63,7 +63,11 @@ export class DashboardComponent {
         this.loading = false;
       },
       error => {
-        console.error('Error generating SQL:', error);
+        if (error.message === 'Rate limit exceeded. Please try again later.') {
+          alert('You have exceeded the rate limit (4xDay). Please wait and try again.');
+        } else {
+          console.error('Error generating SQL:', error);
+        }
         this.loading = false;
       }
     );
