@@ -1,1 +1,50 @@
-<p>dashboard works!</p>
+<section class="flex flex-col align-items-center justify-center min-h-screen p-8 bg-gray-900 text-white">
+  <h1 class="text-8xl mb-8 text-center">Text to SQL Generator</h1>
+  <form class="w-full p-8" (submit)="onSubmit($event)">
+    <div class="mb-4">
+      <textarea id="query" name="query" [(ngModel)]="query"
+        placeholder="Just describe your query - Example: Get all the products where the price is greater than 100."
+        class="w-full h-64 bg-gray-800 text-white p-4"></textarea>
+    </div>
+    
+    <label class="block text-2xl mb-2">Database Schema (Optional)</label>
+    <div class="mb-4 flex flex-row justify-between p-4 flex-wrap">
+      <div *ngFor="let table of schema; let i = index" class="mb-4 w-1/4 mx-4">
+        <div>
+          <input [(ngModel)]="table.name" name="table-{{i}}" placeholder="Table Name"
+            class="w-full bg-gray-800 text-white px-8 py-4 mb-2" />
+          <div *ngFor="let column of table.columns; let j = index" class="flex items-center mb-2">
+            <input [value]="column" (change)="updateColumn(i, j, $event)" name="column-{{i}}-{{j}}"
+              placeholder="Column Name" class="flex-1 bg-gray-800 text-white px-8 py-4" />
+            <button type="button" (click)="removeColumn(i, j)"
+              class="ml-2 px-8 py-4 shadow-xs  border-violet border-4 hover:border-transparent hover:bg-violet text-white font-bold">Remove</button>
+          </div>
+          <button type="button" (click)="addColumn(i)" class="px-8 py-4 shadow-xs  border-violet border-4 hover:border-transparent hover:bg-violet text-white font-bold w-1/2">Add
+            Column</button>
+          <button type="button" (click)="removeTable(i)" class="px-8 py-4 shadow-xs  border-violet border-4 hover:border-transparent hover:bg-violet text-white font-bold w-1/2">Remove
+            Table</button>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center">
+      <button type="button" (click)="addTable()" class="w-1/2 px-8 py-4 shadow-xs  border-violet border-4 hover:border-transparent hover:bg-violet text-white font-bold">Add
+        Table</button>
+      <button type="submit" [disabled]="loading"
+        class="shadow-xs  border-violet border-4 hover:border-transparent hover:bg-violet w-1/2 mt-4 text-white font-bold px-8 py-4 flex items-center justify-center">
+        <span *ngIf="loading" class="loader mr-2"></span>
+        Generate SQL
+      </button>
+    </div>
+  </form>
+  <!-- Modal -->
+  <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white text-black p-8 shadow-lg w-1/2">
+      <h2 class="text-2xl mb-4">Generated SQL</h2>
+      <button (click)="copyToClipboard()" class="bg-violet text-white px-4 py-2 mr-2"><i class="fa-regular fa-copy"></i></button>
+      <pre class="bg-gray-200 p-4 text-wrap">{{ generatedSql }}</pre>
+      <div class="flex justify-end mt-4">
+        <button (click)="closeModal()" class="bg-violet  text-white font-bold px-8 py-4">Close</button>
+      </div>
+    </div>
+  </div>
+</section>
