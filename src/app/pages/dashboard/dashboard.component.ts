@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { SqlGeneratorService } from '../../services/sql-generator.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +20,7 @@ export class DashboardComponent {
   showModal: boolean = false;
   generatedSql: string = '';
 
-  constructor(private sqlGeneratorService: SqlGeneratorService) {}
+  constructor(private sqlGeneratorService: SqlGeneratorService, private router: Router) {}
 
   addTable() {
     this.schema.push({ name: '', columns: [] });
@@ -64,7 +65,8 @@ export class DashboardComponent {
       },
       error => {
         if (error.message === 'Rate limit exceeded. Please try again later.') {
-          alert('You have exceeded the rate limit (4xDay). Please wait and try again.');
+          alert('You have exceeded the rate limit (4xDay). You will be redirected to the login page.');
+          this.router.navigate(['/login']);
         } else {
           console.error('Error generating SQL:', error);
         }

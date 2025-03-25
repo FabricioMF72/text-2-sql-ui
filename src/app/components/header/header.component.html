@@ -1,1 +1,17 @@
-<p>header works!</p>
+<div class="bg-gray-900 text-white p-4 flex justify-end items-center">
+    <div class="flex items-center p-4">
+        @if (this.user()?.photoURL;){
+            <img [src]="this.user()?.photoURL" alt="User Icon" class="w-16 h-16 rounded-full" (click)="this.isMenuOpen = !this.isMenuOpen">
+        }
+    </div>
+    @if (isMenuOpen) {
+        <div class="origin-top-right absolute right-0 top-[46px] mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <h3 class="block px-4 py-2 text-sm text-center text-gray-700" role="menuitem">Welcome {{this.user()?.displayName}}</h3>
+            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <a (click)="printUser()" class="text-gray-400">hello</a>
+                <a (click)="closeMenu()" [routerLink]="['/dashboard']" routerLinkActive="router-link-active"  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">dashboard</a>
+                <a (click)="logOut()" href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Logout</a>
+            </div>
+        </div>
+    }
+</div>
